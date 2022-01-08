@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"majoo-backend-test/app/models"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -41,18 +42,28 @@ func GenerateToken(user models.UserResponse) (string, error) {
 }
 
 // Extract Authorization Token
-func ExtractToken(context *gin.Context) string {
+func ExtractToken(context *gin.Context) (string, error) {
 	// Get Token from Header
 	auhorizationToken := context.Request.Header.Get("Authorization")
 
+	// Check Token
+	if !strings.Contains(auhorizationToken, "Bearer") {
+		return "", errors.New("token: Invalid token")
+	}
+
 	// Return Token
-	return auhorizationToken
+	return strings.Replace(auhorizationToken, "Bearer ", "", -1), nil
 }
 
 // Get User Detail From Token
 func GetUserDetailFromToken(context *gin.Context) (models.UserClaims, error) {
 	// Extract Token Data
-	tokenString := ExtractToken(context)
+	tokenString, err := ExtractToken(context)
+
+	// Check if there is error when extract token
+	if err != nil {
+		return models.UserClaims{}, err
+	}
 
 	// Get Secret Key from ENV
 	key := os.Getenv("JWT_SECRET_KEY")
@@ -72,7 +83,7 @@ func GetUserDetailFromToken(context *gin.Context) (models.UserClaims, error) {
 		return []byte(key), nil
 	})
 
-	// Check if user exist in database & Token Expired
+	// Check if token valid
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		// Catch User Claims from token
 		userId := int(claims["user_id"].(float64))
