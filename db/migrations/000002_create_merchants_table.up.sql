@@ -6,3 +6,9 @@ CREATE TABLE merchants (
   updated_at timestamp NOT NULL DEFAULT NOW(),
   deleted_at timestamp NULL
 );
+
+-- Populate Database
+INSERT INTO merchants ( id, user_id, merchant_name )
+VALUES
+(1, 1, "Merchant 1"),
+(2, 2, "Merchant 2");

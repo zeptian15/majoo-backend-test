@@ -7,3 +7,10 @@ CREATE TABLE outlets (
   updated_at timestamp NOT NULL DEFAULT NOW(),
   deleted_at timestamp NULL
 );
+
+-- Populate Database
+INSERT INTO outlets ( id, user_id, merchant_id, outlet_name )
+VALUES
+(1, 1, 1, "Outlet 1"),
+(2, 2, 2, "Outlet 2"),
+(3, 1, 1, "Outlet 3");

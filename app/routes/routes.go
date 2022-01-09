@@ -6,6 +6,7 @@ import (
 	"majoo-backend-test/app/middlewares"
 	"majoo-backend-test/app/repositories"
 	"majoo-backend-test/app/services"
+	"majoo-backend-test/app/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,9 @@ func SetupRoutes(app *gin.Engine, db *sql.DB) {
 	userRepository := repositories.NewUserRepository(db)
 	authService := services.NewAuthService(userRepository)
 	authController := controllers.NewAuthController(authService)
+
+	// Seed Admin
+	utils.SeedAdminUser(userRepository)
 
 	/// Merchant ///
 	merchantRepository := repositories.NewMerchantRepository(db)
