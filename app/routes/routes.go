@@ -33,6 +33,11 @@ func SetupRoutes(app *gin.Engine, db *sql.DB) {
 	merchantService := services.NewMerchantService(merchantRepository)
 	merchantController := controllers.NewMerchantController(merchantService)
 
+	/// Outlet ///
+	outletRepository := repositories.NewOutletRepository(db)
+	outletService := services.NewOutletService(outletRepository)
+	outletController := controllers.NewOutletController(outletService, merchantService)
+
 	// Setup Routes Group
 	v1 := app.Group("/api/v1")
 
@@ -52,4 +57,12 @@ func SetupRoutes(app *gin.Engine, db *sql.DB) {
 	v1.DELETE("/merchants/:id", authMiddleware, merchantController.DeleteMerchant)
 	v1.GET("/merchants", authMiddleware, merchantController.GetListMerchantByUserId)
 	v1.GET("/merchants/:id/detail", authMiddleware, merchantController.GetMerchantDetailByUserIdAndMerchantId)
+
+	/// Merchants Routes ///
+	v1.POST("/outlets", authMiddleware, outletController.CreateOutlet)
+	v1.PATCH("/outlets/:id", authMiddleware, outletController.UpdateOutlet)
+	v1.DELETE("/outlets/:id", authMiddleware, outletController.DeleteOutlet)
+	v1.GET("/outlets", authMiddleware, outletController.GetListOutletByUserId)
+	v1.GET("/outlets/merchants/:id", authMiddleware, outletController.GetListOutletByUserIdAndMerchantId)
+	v1.GET("/outlets/:id/detail", authMiddleware, outletController.GetOutletDetailByUserIdAndOutletId)
 }

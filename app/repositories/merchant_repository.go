@@ -14,6 +14,7 @@ type MerchantRepository interface {
 	GetMerchantByMerchantId(merchantId int) (models.MerchantResponse, error)
 	GetListMerchantByUserId(userId int) ([]models.MerchantResponse, error)
 	GetMerchantDetailByUserIdAndMerchantId(userId int, merchantId int) (models.MerchantResponse, error)
+	CheckIfMerchantExistByMerchantId(merchantId int) (bool, error)
 }
 
 // Binding Database to Repository ( Constructor )
@@ -165,4 +166,27 @@ func (repository *merchantRepository) GetMerchantDetailByUserIdAndMerchantId(use
 
 	// Return User Response Model
 	return merchant, nil
+}
+
+// Check if Outlet Exists by Username
+func (repository *merchantRepository) CheckIfMerchantExistByMerchantId(merchantId int) (bool, error) {
+	// Prepare Query
+	query := `SELECT id FROM merchants WHERE id=? AND deleted_at IS NULL`
+
+	// Execute Query
+	err := repository.db.QueryRow(query, merchantId).Scan(&merchantId)
+
+	// Check if there is error
+	if err != nil {
+		// If Error is not NoRows
+		if err != sql.ErrNoRows {
+			// Return Query Error
+			return false, err
+		}
+		// If error is NoRows = Outlet does not exists
+		return false, nil
+	}
+
+	// Return Outlet Exist
+	return true, nil
 }

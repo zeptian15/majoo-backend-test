@@ -13,6 +13,7 @@ type MerchantService interface {
 	GetMerchantByMerchantId(merchantId int) (models.MerchantResponse, error)
 	GetListMerchantByUserId(userId int) ([]models.MerchantResponse, error)
 	GetMerchantDetailByUserIdAndMerchantId(userId int, merchantId int) (models.MerchantResponse, error)
+	CheckIfMerchantExistByMerchantId(merchantId int) (bool, error)
 }
 
 // Binding Repository to Service ( Constructor )
@@ -90,4 +91,13 @@ func (service *merchantService) GetMerchantDetailByUserIdAndMerchantId(userId in
 
 	// Return Error
 	return merchant, err
+}
+
+// Check if Merchant Exists by Merchant Id
+func (service *merchantService) CheckIfMerchantExistByMerchantId(merchantId int) (bool, error) {
+	// Access Repository to Check if Merchant Exists by Merchant Id
+	isExist, err := service.repository.CheckIfMerchantExistByMerchantId(merchantId)
+
+	// Return Error
+	return isExist, err
 }
