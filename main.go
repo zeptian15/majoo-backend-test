@@ -1,8 +1,6 @@
 package main
 
-import (
-	"majoo-backend-test/app"
-)
+import "majoo-backend-test/app"
 
 // Create Main Function
 func main() {
