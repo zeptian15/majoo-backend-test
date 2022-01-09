@@ -58,7 +58,7 @@ func (repository *outletRepository) UpdateOutlet(outlet models.Outlet, outletId 
 	return err
 }
 
-// Delete Outlet ( Soft Detelte )
+// Delete Outlet ( Soft Delete )
 func (repository *outletRepository) DeleteOutlet(outletId int) error {
 	// Prepare Query
 	query := `UPDATE outlets SET deleted_at=NOW() WHERE id=?`
@@ -94,7 +94,7 @@ func (repository *outletRepository) GetOutletByOutletId(outletId int) (models.Ou
 		return models.OutletResponse{}, err
 	}
 
-	// Return User Response Model
+	// Return Outlet Response Model
 	return outlet, nil
 }
 
@@ -201,7 +201,7 @@ func (repository *outletRepository) GetOutletDetailByUserIdAndOutletId(userId in
 	// Execute Query
 	row := repository.db.QueryRow(query, userId, outletId)
 
-	// Scan Row to User Response Model
+	// Scan Row to Outlet Response Model
 	if err := row.Scan(
 		&outlet.Id,
 		&outlet.UserId,
@@ -214,11 +214,11 @@ func (repository *outletRepository) GetOutletDetailByUserIdAndOutletId(userId in
 		return models.OutletResponse{}, err
 	}
 
-	// Return User Response Model
+	// Return Outlet Response Model
 	return outlet, nil
 }
 
-// Check if Outlet Exists by Username
+// Check if Outlet Exists by Outlet Id
 func (repository *outletRepository) CheckIfOutletExistByOutletId(outletId int) (bool, error) {
 	// Prepare Query
 	query := `SELECT id FROM outlets WHERE id=? AND deleted_at IS NULL`

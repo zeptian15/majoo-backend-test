@@ -57,7 +57,7 @@ func (repository *merchantRepository) UpdateMerchant(merchant models.Merchant, m
 	return err
 }
 
-// Delete Merchant ( Soft Detelte )
+// Delete Merchant ( Soft Delete )
 func (repository *merchantRepository) DeleteMerchant(merchantId int) error {
 	// Prepare Query
 	query := `UPDATE merchants SET deleted_at=NOW() WHERE id=?`
@@ -92,7 +92,7 @@ func (repository *merchantRepository) GetMerchantByMerchantId(merchantId int) (m
 		return models.MerchantResponse{}, err
 	}
 
-	// Return User Response Model
+	// Return Merchant Response Model
 	return merchant, nil
 }
 
@@ -152,7 +152,7 @@ func (repository *merchantRepository) GetMerchantDetailByUserIdAndMerchantId(use
 	// Execute Query
 	row := repository.db.QueryRow(query, userId, merchantId)
 
-	// Scan Row to User Response Model
+	// Scan Row to Merchant Response Model
 	if err := row.Scan(
 		&merchant.Id,
 		&merchant.UserId,
@@ -164,11 +164,11 @@ func (repository *merchantRepository) GetMerchantDetailByUserIdAndMerchantId(use
 		return models.MerchantResponse{}, err
 	}
 
-	// Return User Response Model
+	// Return Merchant Response Model
 	return merchant, nil
 }
 
-// Check if Outlet Exists by Username
+// Check if Merchant Exists by Merchant Id
 func (repository *merchantRepository) CheckIfMerchantExistByMerchantId(merchantId int) (bool, error) {
 	// Prepare Query
 	query := `SELECT id FROM merchants WHERE id=? AND deleted_at IS NULL`
@@ -183,10 +183,10 @@ func (repository *merchantRepository) CheckIfMerchantExistByMerchantId(merchantI
 			// Return Query Error
 			return false, err
 		}
-		// If error is NoRows = Outlet does not exists
+		// If error is NoRows = Merchant does not exists
 		return false, nil
 	}
 
-	// Return Outlet Exist
+	// Return Merchant Exist
 	return true, nil
 }
