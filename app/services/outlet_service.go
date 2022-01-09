@@ -86,7 +86,7 @@ func (service *outletService) GetListOutletByUserId(userId int) ([]models.Outlet
 	return listOutlet, err
 }
 
-// Get List Outlet by User Id
+// Get List Outlet by User Id & Merchant Id
 func (service *outletService) GetListOutletByUserIdAndMerchantId(userId int, merchantId int) ([]models.OutletResponse, error) {
 	// Access Repository to Get List Outlet by User Id
 	listOutlet, err := service.repository.GetListOutletByUserIdAndMerchantId(userId, merchantId)

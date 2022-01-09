@@ -38,6 +38,11 @@ func SetupRoutes(app *gin.Engine, db *sql.DB) {
 	outletService := services.NewOutletService(outletRepository)
 	outletController := controllers.NewOutletController(outletService, merchantService)
 
+	/// Outlet ///
+	transactionRepository := repositories.NewTransactionRepository(db)
+	transactionService := services.NewTransactionService(transactionRepository)
+	transactionController := controllers.NewTransactionController(transactionService, merchantService, outletService)
+
 	// Setup Routes Group
 	v1 := app.Group("/api/v1")
 
@@ -65,4 +70,8 @@ func SetupRoutes(app *gin.Engine, db *sql.DB) {
 	v1.GET("/outlets", authMiddleware, outletController.GetListOutletByUserId)
 	v1.GET("/outlets/merchants/:id", authMiddleware, outletController.GetListOutletByUserIdAndMerchantId)
 	v1.GET("/outlets/:id/detail", authMiddleware, outletController.GetOutletDetailByUserIdAndOutletId)
+
+	/// Reports Routes ///
+	v1.GET("/transactions/report", authMiddleware, transactionController.GetListTransactionReportByUserId)
+	v1.GET("/transactions/report/detail", authMiddleware, transactionController.GetListTransactionReportDetailByUserId)
 }
