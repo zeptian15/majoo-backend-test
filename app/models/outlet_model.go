@@ -11,8 +11,7 @@ type Outlet struct {
 
 // Outlet ( Request )
 type OutletRequest struct {
-	UserId     int    `json:"user_id" binding:"omitempty"`
-	MerchantId int    `json:"merchant_id" binding:"omitempty"`
+	MerchantId int    `json:"merchant_id" binding:"required"`
 	OutletName string `json:"outlet_name" binding:"required"`
 }
 

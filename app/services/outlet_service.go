@@ -50,6 +50,7 @@ func (service *outletService) CreateOutlet(outletRequest models.OutletRequest, u
 func (service *outletService) UpdateOutlet(outletRequest models.OutletRequest, outletId int) error {
 	// Convert Outlet Request to Outlet Model
 	var outlet models.Outlet
+	outlet.MerchantId = outletRequest.MerchantId
 	outlet.OutletName = outletRequest.OutletName
 
 	// Access Repository to Update Outlet
